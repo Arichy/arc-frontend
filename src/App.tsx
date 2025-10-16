@@ -268,7 +268,6 @@ function App() {
 
   const components: { [key: string]: JSX.Element } = {
     crypto: <Crypto />,
-    shortlink: <ShortLinkGenerator />,
     douyin: <DouyinParser />,
   };
 
@@ -292,12 +291,12 @@ function App() {
           active={active === "crypto"}
           onClick={() => setActive("crypto")}
         />
-        <NavLink
+        {/* <NavLink
           label="短链接生成"
           leftSection={<IconLink size="1rem" stroke={1.5} />}
           active={active === "shortlink"}
           onClick={() => setActive("shortlink")}
-        />
+        /> */}
         <NavLink
           label="抖音解析"
           leftSection={<IconBrandTiktok size="1rem" stroke={1.5} />}
