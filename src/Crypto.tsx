@@ -10,6 +10,7 @@ import {
   Tooltip,
   ActionIcon,
   rem,
+  Text,
 } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 
@@ -111,11 +112,9 @@ const Crypto = () => {
             minHeight: rem(160),
           }}
         >
-          <Textarea
-            value={result}
-            readOnly
-            style={{ minHeight: rem(160), overflowY: "auto" }}
-          />
+          <Text style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>
+            {result}
+          </Text>
           <CopyButton value={result} timeout={2000}>
             {({ copied, copy }) => (
               <Tooltip

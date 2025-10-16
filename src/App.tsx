@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import {
-  Tabs,
+  AppShell,
   TextInput,
   Button,
   Paper,
@@ -11,8 +11,17 @@ import {
   Group,
   ActionIcon,
   Tooltip,
+  Burger,
+  NavLink,
 } from "@mantine/core";
-import { IconCheck, IconCopy } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  IconCheck,
+  IconCopy,
+  IconShieldLock,
+  IconLink,
+  IconBrandTiktok,
+} from "@tabler/icons-react";
 import Crypto from "./Crypto";
 
 // 类型定义
@@ -111,8 +120,16 @@ const ShortLinkGenerator = () => {
                 <Text>{result.shortUrl}</Text>
                 <CopyButton value={result.shortUrl} timeout={2000}>
                   {({ copied, copy }) => (
-                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                      <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                    <Tooltip
+                      label={copied ? "Copied" : "Copy"}
+                      withArrow
+                      position="right"
+                    >
+                      <ActionIcon
+                        color={copied ? "teal" : "gray"}
+                        variant="subtle"
+                        onClick={copy}
+                      >
                         {copied ? (
                           <IconCheck style={{ width: rem(16) }} />
                         ) : (
@@ -208,13 +225,25 @@ const DouyinParser = () => {
             <Notification color="green" title="解析成功！">
               {result.title && <Text>{result.title}</Text>}
               <Group>
-                <a href={result.videoUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={result.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   在新窗口中查看
                 </a>
                 <CopyButton value={result.videoUrl} timeout={2000}>
                   {({ copied, copy }) => (
-                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                      <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                    <Tooltip
+                      label={copied ? "Copied" : "Copy"}
+                      withArrow
+                      position="right"
+                    >
+                      <ActionIcon
+                        color={copied ? "teal" : "gray"}
+                        variant="subtle"
+                        onClick={copy}
+                      >
                         {copied ? (
                           <IconCheck style={{ width: rem(16) }} />
                         ) : (
@@ -234,36 +263,51 @@ const DouyinParser = () => {
 };
 
 function App() {
+  const [opened, { toggle }] = useDisclosure();
+  const [active, setActive] = useState("crypto");
+
+  const components: { [key: string]: JSX.Element } = {
+    crypto: <Crypto />,
+    shortlink: <ShortLinkGenerator />,
+    douyin: <DouyinParser />,
+  };
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Paper withBorder p="md" radius="md" style={{ width: '80%', maxWidth: rem(800) }}>
-        <Tabs defaultValue="crypto">
-          <Tabs.List>
-            <Tabs.Tab value="crypto">
-              文本加密/解密
-            </Tabs.Tab>
-            <Tabs.Tab value="shortlink">
-              短链接生成
-            </Tabs.Tab>
-            <Tabs.Tab value="douyin">
-              抖音解析
-            </Tabs.Tab>
-          </Tabs.List>
+    <AppShell
+      padding="md"
+      header={{ height: 60 }}
+      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
+    >
+      <AppShell.Header>
+        <Group h="100%" px="md">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <Text>神奇妙妙工具</Text>
+        </Group>
+      </AppShell.Header>
 
-          <Tabs.Panel value="crypto" pt="xs">
-            <Crypto />
-          </Tabs.Panel>
+      <AppShell.Navbar p="md">
+        <NavLink
+          label="文本加密/解密"
+          leftSection={<IconShieldLock size="1rem" stroke={1.5} />}
+          active={active === "crypto"}
+          onClick={() => setActive("crypto")}
+        />
+        <NavLink
+          label="短链接生成"
+          leftSection={<IconLink size="1rem" stroke={1.5} />}
+          active={active === "shortlink"}
+          onClick={() => setActive("shortlink")}
+        />
+        <NavLink
+          label="抖音解析"
+          leftSection={<IconBrandTiktok size="1rem" stroke={1.5} />}
+          active={active === "douyin"}
+          onClick={() => setActive("douyin")}
+        />
+      </AppShell.Navbar>
 
-          <Tabs.Panel value="shortlink" pt="xs">
-            <ShortLinkGenerator />
-          </Tabs.Panel>
-
-          <Tabs.Panel value="douyin" pt="xs">
-            <DouyinParser />
-          </Tabs.Panel>
-        </Tabs>
-      </Paper>
-    </div>
+      <AppShell.Main>{components[active]}</AppShell.Main>
+    </AppShell>
   );
 }
 
