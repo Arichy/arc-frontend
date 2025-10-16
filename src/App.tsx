@@ -6,7 +6,6 @@ import {
   Paper,
   Text,
   Notification,
-  Loader,
   CopyButton,
   rem,
   Group,
@@ -238,18 +237,22 @@ function App() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       <Paper withBorder p="md" radius="md" style={{ width: '80%', maxWidth: rem(800) }}>
-        <Tabs defaultValue="douyin">
+        <Tabs defaultValue="crypto">
           <Tabs.List>
+            <Tabs.Tab value="crypto">
+              文本加密/解密
+            </Tabs.Tab>
             <Tabs.Tab value="shortlink">
               短链接生成
             </Tabs.Tab>
             <Tabs.Tab value="douyin">
               抖音解析
             </Tabs.Tab>
-            <Tabs.Tab value="crypto">
-              文本加密/解密
-            </Tabs.Tab>
           </Tabs.List>
+
+          <Tabs.Panel value="crypto" pt="xs">
+            <Crypto />
+          </Tabs.Panel>
 
           <Tabs.Panel value="shortlink" pt="xs">
             <ShortLinkGenerator />
@@ -257,10 +260,6 @@ function App() {
 
           <Tabs.Panel value="douyin" pt="xs">
             <DouyinParser />
-          </Tabs.Panel>
-
-          <Tabs.Panel value="crypto" pt="xs">
-            <Crypto />
           </Tabs.Panel>
         </Tabs>
       </Paper>
